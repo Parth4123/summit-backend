@@ -57,5 +57,30 @@ export default class summitDAO {
     }
   }
 
+  async getAccommodation() {
+      try {
+        // Get all collection names
+        const collectionNames = await cluster0.listCollections().toArray();
+
+        // Initialize an array to store all teams that have said "Yes" for accommodation
+        let allTeams = [];
+
+        // Iterate over all collections and find teams that have said "Yes" for accommodation
+        for (let collection of collectionNames) {
+          const teams = await cluster0.collection(collection.name).find({ accommodation: "Yes" }, { projection: { _id: 0, collegeName: 1, sportsConfirm: 1 } }).toArray();          allTeams = allTeams.concat(teams);
+        }
+
+        if (!allTeams.length) {
+          console.log("Unable to find teams");
+          return false;
+        }
+
+        return allTeams;
+      } catch (e) {
+        // Log any errors that occur during fetching
+        console.error(`Unable to find teams: ${e}`);
+        return { error: e };
+      }
+  }
  
 }

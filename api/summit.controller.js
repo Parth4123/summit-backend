@@ -49,5 +49,19 @@ export default class summitController {
       res.status(500).json({ error: e.message });
     }
   }
+  static async apiGetAccomodation(req, res) {
+    try{
+      const getAccomodation = await dao.getAccommodation();
+      if (getAccomodation){
+        res.json(getAccomodation);
+      }else{
+        res.json({message: "failure"});
+      }
+    }catch(e){
+      console.log(e)
+      res.status(500).json({ error: e.message });
+    }
+  }
 
 }
+
